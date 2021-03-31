@@ -7,7 +7,7 @@
  - 2. alpine image : choose alpine as base image, this kind of image will be very tiny
  - 3. example image : usually contains a springboot demo or something like that, for testing or demo
  
-if you got an dis full error in container, try following command
+if you want delete all volumes, try following command
 
 ```bash
 docker system prune --volumes -f
