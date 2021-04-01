@@ -11,7 +11,7 @@ services:
     ## you could access the mysql in container by following command :
     ## docker exec -it sharding-sphere-mysql mysql -uroot
     environment:
-     - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+     - MYSQL_ALLOW_EMPTY_PASSWORD=true
     ## if you insist to use password in mysql, remove MYSQL_ALLOW_EMPTY_PASSWORD=yes and uncomment following args
     #  - MYSQL_ROOT_PASSWORD=root
     volumes:
