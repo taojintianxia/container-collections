@@ -66,7 +66,7 @@ services:
   zkui:
     depends_on:
       - "zookeeper"
-    image: "maauso/zkui"
+    image: "juris/zkui"
     container_name: sharding-sphere-zkui
     ports:
       - "9090:9090"
