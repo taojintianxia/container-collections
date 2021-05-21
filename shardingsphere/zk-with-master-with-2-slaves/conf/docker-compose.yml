@@ -57,7 +57,7 @@ services:
 
   zookeeper:
     ## get more versions of zookeeper here : https://hub.docker.com/_/zookeeper?tab=tags
-    image: "zookeeper:3.4"
+    image: "zookeeper:3.7.0"
     ports:
       - "2181:2181"
     container_name: sharding-sphere-zookeeper
@@ -71,4 +71,4 @@ services:
     ports:
       - "9090:9090"
     environment:
-      - ZKLIST=sharding-sphere-zookeeper:2181
+      - ZK_SERVER=sharding-sphere-zookeeper:2181
