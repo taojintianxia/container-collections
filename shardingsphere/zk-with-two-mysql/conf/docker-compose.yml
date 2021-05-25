@@ -50,4 +50,5 @@ services:
     ports:
       - "9090:9090"
     environment:
-      - ZKLIST=sharding-sphere-zookeeper:2181
+      - ZKLIST=zookeeper:2181
+      - sessionTimeout=7200
