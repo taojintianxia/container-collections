@@ -1,0 +1,53 @@
+version: '3'
+services:
+  mysql-A:
+    ## mysql version, you could get more tags at here : https://hub.docker.com/_/mysql?tab=tags
+    image: "mysql:${MYSQL_VERSION}"
+    ## default host port is 3306, you can change to any other port doesn't conflict MySQL on your OS
+    ports:
+     - "${MYSQL_A_PORT}:3306"
+    container_name: mysql-A
+    ## launch mysql without password
+    ## you could access the mysql in container by following command :
+    ## docker exec -it sharding-sphere-mysql mysql -uroot
+    environment:
+     - MYSQL_ROOT_PASSWORD=${ROOT_USER_PASSWORD}
+    ## if you insist to use password in mysql, remove MYSQL_ALLOW_EMPTY_PASSWORD=yes and uncomment following args
+    #  - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ../sql/manual_schema.sql:/docker-entrypoint-initdb.d/manual_schema.sql
+
+  mysql-B:
+    ## mysql version, you could get more tags at here : https://hub.docker.com/_/mysql?tab=tags
+    image: "mysql:${MYSQL_VERSION}"
+    ## default host port is 3306, you can change to any other port doesn't conflict MySQL on your OS
+    ports:
+      - "${MYSQL_B_PORT}:3306"
+    container_name: mysql-B
+    ## launch mysql without password
+    ## you could access the mysql in container by following command :
+    ## docker exec -it sharding-sphere-mysql mysql -uroot
+    environment:
+      - MYSQL_ROOT_PASSWORD=${ROOT_USER_PASSWORD}
+    ## if you insist to use password in mysql, remove MYSQL_ALLOW_EMPTY_PASSWORD=yes and uncomment following args
+    #  - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ../sql/manual_schema.sql:/docker-entrypoint-initdb.d/manual_schema.sql
+
+  zookeeper:
+    ## get more versions of zookeeper here : https://hub.docker.com/_/zookeeper?tab=tags
+    image: "zookeeper:${ZOOKEEPER_VERSION}"
+    ports:
+      - "2181:2181"
+    container_name: zookeeper
+
+  ## access zkui by navigating localhost:9090
+  zkui:
+    depends_on:
+      - "zookeeper"
+    image: "maauso/zkui:${ZKUI_VERSION}"
+    container_name: zkui
+    ports:
+      - "9090:9090"
+    environment:
+      - ZKLIST=sharding-sphere-zookeeper:2181
