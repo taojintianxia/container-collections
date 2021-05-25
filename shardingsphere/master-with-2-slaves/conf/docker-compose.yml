@@ -26,6 +26,7 @@ services:
     volumes:
       - ../resources/database-init.sql:/docker-entrypoint-initdb.d/database-init.sql
       - ../resources/master-init.sql:/docker-entrypoint-initdb.d/master-init.sql
+      - ../resources/master/my.cnf:/etc/my.cnf
 
   mysql-slave-0:
     ## mysql version, you could get more tags at here : https://hub.docker.com/_/mysql?tab=tags
@@ -53,6 +54,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ../resources/slave-init.sql:/docker-entrypoint-initdb.d/slave-init.sql
+      - ../resources/slave/my.cnf:/etc/my.cnf
 
   mysql-slave-1:
     ## mysql version, you could get more tags at here : https://hub.docker.com/_/mysql?tab=tags

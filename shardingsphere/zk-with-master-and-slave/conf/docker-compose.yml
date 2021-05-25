@@ -6,7 +6,7 @@ services:
     ## host port is 3306, you could change to 33060 or any other port doesn't conflict MySQL on your OS
     ports:
       - "13306:3306"
-    container_name: sharding-sphere-mysql-master
+    container_name: mysql-master
     ## launch mysql with password root
     ## you could access the mysql in container by following command :
     ## docker exec -it sharding-sphere-mysql mysql -uroot -proot
@@ -16,15 +16,17 @@ services:
       - MYSQL_ROOT_PASSWORD=${ROOT_USER_PASSWORD}
       - TZ=Asia/Shanghai
     volumes:
-      - ../sql/manual_schema.sql:/docker-entrypoint-initdb.d/manual_schema.sql
+      - ../resources/database-init.sql:/docker-entrypoint-initdb.d/database-init.sql
+      - ../resources/master-init.sql:/docker-entrypoint-initdb.d/master-init.sql
+      - ../resources/master/my.cnf:/etc/my.cnf
 
-  mysql-slave-0:
+  mysql-slave:
     ## mysql version, you could get more tags at here : https://hub.docker.com/_/mysql?tab=tags
     image: mysql:${TAG}
     ## host port is 3306, you could change to 33060 or any other port doesn't conflict MySQL on your OS
     ports:
       - "13307:3306"
-    container_name: sharding-sphere-mysql-slave-0
+    container_name: mysql-slave
     ## launch mysql with password root
     ## you could access the mysql in container by following command :
     ## docker exec -it sharding-sphere-mysql mysql -uroot -proot
@@ -35,40 +37,23 @@ services:
       - MYSQL_ROOT_PASSWORD=${ROOT_USER_PASSWORD}
       - TZ=Asia/Shanghai
     volumes:
-      - ../sql/manual_schema.sql:/docker-entrypoint-initdb.d/manual_schema.sql
-
-  mysql-slave-1:
-    ## mysql version, you could get more tags at here : https://hub.docker.com/_/mysql?tab=tags
-    image: mysql:${TAG}
-    ## host port is 3306, you could change to 33060 or any other port doesn't conflict MySQL on your OS
-    ports:
-      - "13308:3306"
-    container_name: sharding-sphere-mysql-slave-1
-    ## launch mysql with password root
-    ## you could access the mysql in container by following command :
-    ## docker exec -it sharding-sphere-mysql mysql -uroot -proot
-    ## if you insist to use password in mysql, remove MYSQL_ALLOW_EMPTY_PASSWORD=yes and uncomment following args
-    #  - MYSQL_ROOT_PASSWORD=root
-    environment:
-      - MYSQL_ROOT_PASSWORD=${ROOT_USER_PASSWORD}
-      - TZ=Asia/Shanghai
-    volumes:
-      - ../sql/manual_schema.sql:/docker-entrypoint-initdb.d/manual_schema.sql
+      - ../resources/slave-init.sql:/docker-entrypoint-initdb.d/slave-init.sql
+      - ../resources/slave/my.cnf:/etc/my.cnf
 
   zookeeper:
     ## get more versions of zookeeper here : https://hub.docker.com/_/zookeeper?tab=tags
     image: "zookeeper:3.7.0"
     ports:
       - "2181:2181"
-    container_name: sharding-sphere-zookeeper
+    container_name: zookeeper
 
   ## access zkui by navigating localhost:9090
   zkui:
     depends_on:
       - "zookeeper"
-    image: "juris/zkui"
-    container_name: sharding-sphere-zkui
+    image: "maauso/zkui:${ZKUI_VERSION}"
+    container_name: zkui
     ports:
       - "9090:9090"
     environment:
-      - ZK_SERVER=sharding-sphere-zookeeper:2181
+      - ZKLIST=zookeeper:2181

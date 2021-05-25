@@ -51,4 +51,3 @@ services:
       - "9090:9090"
     environment:
       - ZKLIST=zookeeper:2181
-      - sessionTimeout=7200
