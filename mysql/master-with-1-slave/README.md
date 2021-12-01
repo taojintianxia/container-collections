@@ -1,0 +1,1 @@
+本脚本会启动一台 MySQL 为 master，一台 MySQL 为 slave，通过 binlog 去同步 master 的数据
