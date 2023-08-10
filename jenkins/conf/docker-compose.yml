@@ -10,4 +10,3 @@ services:
     container_name: jenkins-lts
     volumes:
       - $HOME/Incubator/docker/jenkins:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
