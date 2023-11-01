@@ -1,6 +1,6 @@
 FROM alpine:3.18 AS builder
 
-ENV SYSBENCH_VERSION 1.0.20-r1
+ENV SYSBENCH_VERSION 1.0.20
 
 RUN apk add --no-cache --update \
         bash-completion \
